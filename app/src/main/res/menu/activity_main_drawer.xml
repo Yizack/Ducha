@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_perfil"
+            android:icon="@drawable/ic_select_all_action_mode"
+            android:title="Perfil" />
+        <item
+            android:id="@+id/nav_guide"
+            android:icon="@drawable/ic_remote_view_play"
+            android:title="Guía" />
+        <item
+            android:id="@+id/nav_introduction"
+            android:icon="@drawable/ic_star_black"
+            android:title="Introducción" />
+        <item
+            android:id="@+id/nav_manage"
+            android:icon="@android:drawable/ic_delete"
+            android:title="Salir" />
+    </group>
+
+    <item android:title="Información">
+        <menu>
+            <item
+                android:id="@+id/nav_about"
+                android:icon="@drawable/ic_favorite_border_black"
+                android:title="Acerca de" />
+            <item
+                android:id="@+id/nav_share"
+                android:icon="?android:attr/actionModeShareDrawable"
+                android:title="Compartir" />
+        </menu>
+    </item>
+
+</menu>

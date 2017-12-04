@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#404969</color>
+    <color name="colorPrimaryDark">#2b3247</color>
+    <color name="colorAccent">#DC552C</color>
+    <color name="colorAccent2">#6b6b6b</color>
+    <color name="colorAccent3">#86b171</color>
+    <color name="colorBlanco">#ffffff</color>
+    <color name="colorNegro">#000000</color>
+    <color name="iron">#ccc</color>
+    <color name="colorPrimaryButton">#2b388e</color>
+    <color name="colorPrimaryDarkButton">#0bb893</color>
+    <!-- Common -->
+    <color name="transparent">#00000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+</resources>
