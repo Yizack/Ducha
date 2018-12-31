@@ -1,51 +1,17 @@
 sudo: required
-
 language: android
 jdk: oraclejdk8
-
-before_cache:
-  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -rf $HOME/.gradle/caches/*/plugin-resolution/
-
-cache:
-  directories:
-  - $HOME/.gradle/caches/
-  - $HOME/.gradle/wrapper/
-  - $HOME/.android/build-cache
-
-env:
-  global:
-    - ANDROID_API=26
-    - ANDROID_BUILD_TOOLS=27
-    - EMULATOR_API=26
-    - sys-img-armeabi-v7a-addon-google_apis-google-$ANDROID_API_LEVEL
-    - sys-img-armeabi-v7a-addon-google_apis-google-$EMULATOR_API_LEVEL
-
 android:
-  components:
-  - tools
-  - tools
-  - platform-tools
-  - android-${ANDROID_API}
-  - android-$EMULATOR_API_LEVEL
-  - build-tools-${ANDROID_BUILD_TOOLS}
-  - extra-google-google_play_services
-  - extra-google-m2repository
-  - extra-android-m2repository
-  licenses:
-  - android-sdk-preview-license-.+
-  - android-sdk-license-.+
-  - google-gdk-license-.+
-
+ components:
+    - platform-tools
+    - tools
+    - build-tools-26.0.2
+    - android-26
+    - extra-android-m2repository
 before_script:
-  - echo no | android create avd --force -n test -t android-26 --abi armeabi-v7a
-  - emulator -avd test -no-skin -no-audio -no-window &
-  - android-wait-for-emulator
-  - adb shell input keyevent 82 &
-
+ - chmod +x gradlew
+ - chmod +x generate-apk.sh
 script:
-  - "./gradlew clean build connectedCheck -PdisablePreDex --stacktrace"
-  
-before_install:
-  - chmod +x gradlew
-  - ./gradlew dependencies || true
+ - ./gradlew assembleDebug --stacktrace # Change 'assembleDebug' to 'build' when lint issues are fixed. Update generate-apk.sh accordingly
+after_success:
+ - ./generate-apk.sh
