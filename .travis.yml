@@ -29,3 +29,6 @@ android:
 
 script:
 - ./gradlew clean test build
+
+before_install:
+- chmod +x gradlew
