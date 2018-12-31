@@ -6,10 +6,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
-/**
- * Created by Administrator on 10/1/2016.
- */
-
 public class ControladorDeInicio extends Application {
     public static final String TAG = ControladorDeInicio.class.getSimpleName();
 
