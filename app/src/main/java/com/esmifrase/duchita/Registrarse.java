@@ -86,6 +86,13 @@ public class Registrarse extends AppCompatActivity {
         boolean cancel = false;
         View focusView = null;
 
+        // Verifica usuario
+        if(!isUsernameValid(username)){
+            mUsernameView.setError(getString(R.string.error_invalid_username));
+            focusView = mUsernameView;
+            cancel = true;
+        }
+
         // Verifica por contraseña valida
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
@@ -127,16 +134,20 @@ public class Registrarse extends AppCompatActivity {
 
 
     private boolean isEmailValid(String email) {
-        return email.contains("@") && email.contains(".");
+        return email.contains("@") && email.contains(".") && email.length() <= 200;
     }
 
     private boolean isPasswordValid(String password) {
         return password.length() > 4;
     }
 
+    private boolean isUsernameValid(String username) {
+        return username.length() <= 50 && username.length() > 0;
+    }
+
     private void signup(final String username, final String email, final String password){
         String tag_string_req = "req_signup";
-        progressDialog.setMessage("Signing up...");
+        progressDialog.setMessage("Iniciando Sesión...");
         progressDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,

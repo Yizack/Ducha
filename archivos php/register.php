@@ -33,7 +33,6 @@ if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['passwor
             $response["user"]["id"] = $user["id"];
             $response["user"]["email"] = $user["email"];
             $response["user"]["username"] = $user["username"];
-            $response["user"]["email"] = $user["email"];
             echo json_encode($response);
         } else {
             // user failed to store

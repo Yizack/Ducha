@@ -120,6 +120,12 @@ public class Perfil extends AppCompatActivity {
                     boolean cancel = false;
                     View focusView = null;
 
+                    if(!isUsernameValid(username)){
+                        tvEditUsername.setError(getString(R.string.error_invalid_username));
+                        focusView = tvEditUsername;
+                        cancel = true;
+                    }
+
                     if (TextUtils.isEmpty(email)) {
                         tvEditEmail.setError(getString(R.string.error_field_required));
                         focusView = tvEditEmail;
@@ -170,6 +176,10 @@ public class Perfil extends AppCompatActivity {
 
     private boolean isPasswordValid(String password) {
         return password.length() > 4;
+    }
+
+    private boolean isUsernameValid(String username) {
+        return username.length() <= 50 && username.length() > 0;
     }
 
     public void hideKeyboard() {

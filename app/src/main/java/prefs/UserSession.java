@@ -3,10 +3,6 @@ package prefs;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-/**
- * Created by Administrator on 10/1/2016.
- */
-
 public class UserSession {
     private static final String TAG = UserSession.class.getSimpleName();
     private static final String PREF_NAME = "login";
