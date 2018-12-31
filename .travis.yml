@@ -1,7 +1,39 @@
 language: android
 android:
   components:
+    - tools
     - build-tools-27
     - android-26
-before_install:
+    - platform-tools
+    - extra-android-support
+    - extra-google-google_play_services
+    - extra-android-m2repository
+    - extra-google-m2repository
+licenses:
+    - '.+'
+
+sudo: required
+
+jdk:
+    - oraclejdk8
+
+install: true
+
+script:
+    - sudo apt-get update && sudo apt-get install oracle-java8-installer
+    - java -version
+
+before_script:
     - chmod +x gradlew
+
+script:
+    - ./gradlew assembleDebug --stacktrace
+
+deploy:
+  provider: releases
+  api-key: $GITHUB_APIKEY
+  file: "app/build/outputs/apk/duchita.apk"
+  skip_cleanup: true
+  on:
+    tags: true
+    all_branches: true
