@@ -1,6 +1,6 @@
 <?php
 	/**
-	*Database config variables
+	Reemplaza estos valores para utilizar tu base de datos
 	*/
 	define("DB_HOST","localhost");
 	define("DB_USER","tu_usuario");
