@@ -48,4 +48,4 @@ script:
   
 before_install:
   - chmod +x gradlew
-  - ./gradlew dependencies || tru
+  - ./gradlew dependencies || true
