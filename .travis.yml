@@ -14,9 +14,9 @@ cache:
   - $HOME/.android/build-cache
 
 env:
- global:
- - ANDROID_API=26
- - ANDROID_BUILD_TOOLS=27
+  global:
+    - ANDROID_API=26
+    - ANDROID_BUILD_TOOLS=27
 
 android:
   components:
@@ -25,10 +25,12 @@ android:
   - platform-tools
   - android-${ANDROID_API}
   - build-tools-${ANDROID_BUILD_TOOLS}
-  - extra
+  - extra-google-google_play_services
+  - extra-google-m2repository
+  - extra-android-m2repository
 
 script:
-- ./gradlew clean test build
+  - ./gradlew build connectedCheck
 
 before_install:
-- chmod +x gradlew
+  - chmod +x gradlew
