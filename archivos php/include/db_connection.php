@@ -3,9 +3,9 @@
 	*Database config variables
 	*/
 	define("DB_HOST","localhost");
-	define("DB_USER","id3692365_users");
-	define("DB_PASSWORD","eric3435y");
-	define("DB_DATABASE","id3692365_users");
+	define("DB_USER","tu_usuario");
+	define("DB_PASSWORD","tu_contraseña");
+	define("DB_DATABASE","tu_basededatos");
 
 	$connection = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE);
 
