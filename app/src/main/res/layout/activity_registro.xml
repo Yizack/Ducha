@@ -38,7 +38,7 @@
                 android:layout_marginBottom="8dp"
                 android:id="@+id/username"
                 android:inputType="textCapWords|textPersonName"
-                android:hint="Nombre"/>
+                android:hint="@string/hint_nombre"/>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
                 android:layout_marginBottom="8dp"
                 android:id="@+id/email"
                 android:inputType="textEmailAddress"
-                android:hint="E-mail"/>
+                android:hint="@string/hint_email"/>
 
 
             <EditText
@@ -62,7 +62,7 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="REGRISTRAR"
+                android:text="@string/sign_up"
                 android:id="@+id/signup"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="12dp"

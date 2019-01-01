@@ -55,7 +55,7 @@
                 android:layout_marginBottom="8dp"
                 android:id="@+id/email"
                 android:inputType="textEmailAddress"
-                android:hint=" E-mail" />
+                android:hint="@string/hint_email" />
 
             <EditText
                 android:id="@+id/password"
@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
-                android:hint=" Password"
+                android:hint="@string/hint_password"
                 android:inputType="textPassword" />
 
             <Button
@@ -74,7 +74,7 @@
                 android:layout_marginBottom="24dp"
                 android:layout_marginTop="24dp"
                 android:background="@color/colorAccent"
-                android:text="ACCEDER" />
+                android:text="@string/login" />
 
             <TextView android:id="@+id/open_signup"
                 android:layout_width="match_parent"

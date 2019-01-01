@@ -2,15 +2,13 @@
     <string name="app_name">Duchita App</string>
     <string name="hint_username">Usuario</string>
     <string name="hint_password">Contraseña</string>
-    <string name="login">Login</string>
-    <string name="sign_up">Sign Up</string>
-    <string name="hint_email">Email</string>
-    <string name="logout">Log Out</string>
-    <string name="title_activity_main">Ducha</string>
-
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
+    <string name="login">Acceder</string>
+    <string name="sign_up">Registrar</string>
+    <string name="hint_email">E-mail</string>
+    <string name="hint_nombre">Nombre</string>
+    <string name="title_activity_main">Duchita</string>
+    <string name="navigation_drawer_open">Menú de navegación abierto</string>
+    <string name="navigation_drawer_close">Menú de navegación cerrado</string>
     <string name="action_settings">Configuración</string>
     <string name="error_invalid_email">Este correo no es valido</string>
     <string name="error_invalid_password">La contraseña debe contener mas de 4 caracteres</string>

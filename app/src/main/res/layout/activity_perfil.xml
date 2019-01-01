@@ -37,7 +37,7 @@
                 android:layout_height="140dp"
                 android:layout_marginTop="10dp"
                 android:adjustViewBounds="true"
-                android:src="@drawable/shower"
+                android:src="@drawable/duchita"
                 android:tint="@color/colorBlanco"
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier="0.7" />
