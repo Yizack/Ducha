@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Duchita App</string>
+    <string name="app_name">DuchitaApp</string>
     <string name="hint_username">Usuario</string>
     <string name="hint_password">Contraseña</string>
     <string name="login">Acceder</string>
