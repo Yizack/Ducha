@@ -36,7 +36,7 @@ public class Registrarse extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
+        setContentView(R.layout.activity_registro);
 
         username        = (EditText)findViewById(R.id.username);
         email           = (EditText)findViewById(R.id.email);

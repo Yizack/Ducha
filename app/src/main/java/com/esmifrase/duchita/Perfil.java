@@ -20,7 +20,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.esmifrase.duchita.R;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.HashMap;
@@ -39,7 +39,7 @@ public class Perfil extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_perfil);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
