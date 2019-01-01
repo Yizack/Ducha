@@ -92,11 +92,11 @@ public class Perfil extends AppCompatActivity {
                 if(isEdit == true){
                     FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
                     fab.setImageResource(R.drawable.save);
-                    tvUsername.setVisibility(4);
-                    tvEmail.setVisibility(4);
+                    tvUsername.setVisibility(View.INVISIBLE);
+                    tvEmail.setVisibility(View.INVISIBLE);
 
-                    tvEditUsername.setVisibility(1);
-                    tvEditEmail.setVisibility(1);
+                    tvEditUsername.setVisibility(View.VISIBLE);
+                    tvEditEmail.setVisibility(View.VISIBLE);
 
                     tvEditUsername.setText(username);
                     tvEditEmail.setText(email);
@@ -108,11 +108,11 @@ public class Perfil extends AppCompatActivity {
                     FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
                     fab.setImageResource(R.drawable.pencil);
                     isEdit = true;
-                    tvUsername.setVisibility(1);
-                    tvEmail.setVisibility(1);
+                    tvUsername.setVisibility(View.VISIBLE);
+                    tvEmail.setVisibility(View.VISIBLE);
 
-                    tvEditUsername.setVisibility(4);
-                    tvEditEmail.setVisibility(4);
+                    tvEditUsername.setVisibility(View.INVISIBLE);
+                    tvEditEmail.setVisibility(View.INVISIBLE);
 
                     username = tvEditUsername.getText().toString();
                     email = tvEditEmail.getText().toString();
