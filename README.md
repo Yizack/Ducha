@@ -44,7 +44,7 @@ Proyecto de Android Studio - Cronómetro/Alarma para android
      ```
 5. Asignar nombre al APK
    - En [`/app/`](https://github.com/Yizack/duchita/blob/master/app/) edita el nombre de tu app en [`build.gradle`](https://github.com/Yizack/duchita/blob/master/app/build.gradle).
-     ```java
+     ```gradle
      ...
      def appName = "duchita"
      ...
