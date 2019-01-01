@@ -1,34 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.esmifrase.duchita">
-
     <uses-permission android:name="android.permission.INTERNET" />
-
     <application
         android:name="com.esmifrase.duchita.ControladorDeInicio"
         android:allowBackup="true"
         android:icon="@drawable/duchitaapp"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.Dark">
+        android:theme="@style/AppTheme.Dark"
+        android:fullBackupContent="true"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:label="@string/hint_username"
             android:name="com.esmifrase.duchita.Perfil"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name="com.esmifrase.duchita.Registrarse" />
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name="com.esmifrase.duchita.Registrarse"/>
         <activity android:name="com.esmifrase.duchita.Login">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name="com.esmifrase.duchita.Duchita"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.Dark"></activity>
+            android:theme="@style/AppTheme.Dark"/>
         <activity android:name="com.esmifrase.duchita.Intro"
-            android:label="Intro" />
+            android:label="Intro"/>
     </application>
-
 </manifest>
-
