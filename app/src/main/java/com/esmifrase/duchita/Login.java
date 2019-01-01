@@ -204,4 +204,12 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                 break;
         }
     }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        if ( progressDialog!=null && progressDialog.isShowing() ){
+            progressDialog.cancel();
+        }
+    }
 }
