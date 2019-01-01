@@ -30,7 +30,7 @@
                 android:title="Acerca de" />
             <item
                 android:id="@+id/nav_share"
-                android:icon="?android:attr/actionModeShareDrawable"
+                android:icon="@android:drawable/ic_menu_share"
                 android:title="Compartir" />
         </menu>
     </item>
