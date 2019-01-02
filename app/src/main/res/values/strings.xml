@@ -7,6 +7,11 @@
     <string name="hint_email">E-mail</string>
     <string name="hint_nombre">Nombre</string>
     <string name="title_activity_main">Duchita</string>
+    <string name="alarma">Alarma activada</string>
+    <string name="alarma_normal">En 5 minutos</string>
+    <string name="alarma_shampoo">En 10 minutos</string>
+    <string name="alarma_modo_normal">Modo: Normal</string>
+    <string name="alarma_modo_shampoo">Modo: Shampoo</string>
     <string name="navigation_drawer_open">Menú de navegación abierto</string>
     <string name="navigation_drawer_close">Menú de navegación cerrado</string>
     <string name="action_settings">Configuración</string>
