@@ -98,18 +98,17 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
             public void onClick(View view) {
                 isChronometerRunning = false;
                 stopCronometro();
+                cancelarNotificacion();
                 if(!isActiveShampoo){
                     Intervalo = Intervalo*2;
                     sIntervalo = sIntervalo*2;
                     isActiveShampoo = true;
-                    cancelarNotificacion();
                     Snackbar.make(view, "Modo Shampoo activado", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
                 else {
                     Intervalo = Intervalo/2;
                     sIntervalo = sIntervalo/2;
                     isActiveShampoo = false;
-                    cancelarNotificacion();
                     Snackbar.make(view, "Modo Shampoo desactivado", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
             }
