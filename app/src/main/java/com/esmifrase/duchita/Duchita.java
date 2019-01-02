@@ -1,15 +1,19 @@
 package com.esmifrase.duchita;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
+import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,33 +24,28 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Chronometer;
 import android.widget.TextView;
-
 import prefs.UserInfo;
 import prefs.UserSession;
 
-public class Duchita extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-    private TextView tvUsername, tvEmail;
+public class Duchita extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Chronometer chronometer;
     private UserInfo userInfo;
     private UserSession userSession;
     private boolean isChronometerRunning = false;
     private boolean isActiveShampoo = false;
-    private Handler mHandler;
-    private static int minutes = 5;
-    private static int seconds = 60;
-    private int mInterval = (seconds*minutes)*1000;
+    private static int Minutos = 0;
+    private static int MIntervalo = 5; // Cada cuánto se reproduce la alarma. (EN MINUTOS)
     private long timeRunning = 0;
+    private Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         userInfo      = new UserInfo(this);
         userSession   = new UserSession(this);
-        mHandler = new Handler();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         if(!userSession.isUserLoggedin()){
@@ -61,30 +60,42 @@ public class Duchita extends AppCompatActivity
         userInfo.setAntUsername(username);
 
         System.out.println(email+", "+username);
-        chronometer = (Chronometer) findViewById(R.id.simpleChronometer); // initiate a chronometer
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        FloatingActionButton media = (FloatingActionButton) findViewById(R.id.media);
-        FloatingActionButton shampoo = (FloatingActionButton) findViewById(R.id.shampoo);
+        chronometer = findViewById(R.id.simpleChronometer);
+        FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton media = findViewById(R.id.media);
+        FloatingActionButton shampoo = findViewById(R.id.shampoo);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isChronometerRunning == false) {
+                if(!isChronometerRunning) {
                     chronometer.setBase(SystemClock.elapsedRealtime());
+                    chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+                    public void onChronometerTick(Chronometer chronometer) {
+                        String ss = chronometer.getText().charAt(3) + "" + chronometer.getText().charAt(4);
+                        int Segundos = Integer.parseInt(ss);
+                        if(Minutos == MIntervalo && Segundos == 0){ // Reproducir Sonido cada MIntervalo minutos
+                            MediaPlayer sonido = MediaPlayer.create(context, Settings.System.DEFAULT_NOTIFICATION_URI);
+                            sonido.start();
+                            sonido.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                public void onCompletion(MediaPlayer sonido) {
+                                    sonido.release();
+                                }});
+                            System.out.println("\n*****\nSonido reproducido en: "+chronometer.getText());
+                            Minutos = 0;
+                        }
+                        if(Segundos == 59){
+                            Minutos++;
+                        }
+                    }});
                     chronometer.start();
                     isChronometerRunning = true;
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            startRepeatingTask();
-                        }
-                    }, mInterval);
+                    activarAlarma();
                 }
                 else{
                     chronometer.stop();
                     isChronometerRunning = false;
-                    stopRepeatingTask();
+                    desactivarAlarma();
                 }
             }
         });
@@ -92,49 +103,46 @@ public class Duchita extends AppCompatActivity
         media.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Esta función aún no está implementada", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Snackbar.make(view, "Esta función aún no está implementada", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
 
         shampoo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isActiveShampoo == false){
+                if(!isActiveShampoo){
                     chronometer.stop();
                     chronometer.setBase(SystemClock.elapsedRealtime());
-                    mInterval = mInterval*2;
+                    MIntervalo = MIntervalo*2;
                     isActiveShampoo = true;
                     isChronometerRunning = false;
-                    stopRepeatingTask();
+                    desactivarAlarma();
                     Snackbar.make(view, "Modo Shampoo activado", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }
                 else {
                     chronometer.setBase(SystemClock.elapsedRealtime());
-                    mInterval = (seconds*minutes)*1000;
+                    MIntervalo = MIntervalo/2;
                     isActiveShampoo = false;
                     isChronometerRunning = false;
-                    stopRepeatingTask();
+                    desactivarAlarma();
                     Snackbar.make(view, "Modo Shampoo desactivado", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }
             }
         });
 
-        
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View header=navigationView.getHeaderView(0);
-        tvUsername      = (TextView)header.findViewById(R.id.key_username);
-        tvEmail         = (TextView)header.findViewById(R.id.key_email);
+        TextView tvUsername = header.findViewById(R.id.key_username);
+        TextView tvEmail = header.findViewById(R.id.key_email);
 
         tvUsername.setText(username);
         tvEmail.setText(email);
@@ -143,7 +151,7 @@ public class Duchita extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -160,7 +168,7 @@ public class Duchita extends AppCompatActivity
 
     @Override
     protected void onResume() {
-        if (isChronometerRunning == true){
+        if (isChronometerRunning){
             timeRunning = SystemClock.elapsedRealtime() - chronometer.getBase();
             chronometer.setBase(SystemClock.elapsedRealtime() - timeRunning);
             chronometer.start();
@@ -170,7 +178,7 @@ public class Duchita extends AppCompatActivity
 
     @Override
     public void onDestroy() {
-        stopRepeatingTask();
+        desactivarAlarma();
         super.onDestroy();
 
     }
@@ -207,7 +215,7 @@ public class Duchita extends AppCompatActivity
             startActivity(new Intent(Duchita.this, Perfil.class));
         }
         else if (id == R.id.nav_manage) {
-                stopRepeatingTask();
+                desactivarAlarma();
                 userSession.setLoggedin(false);
                 userInfo.clearUserInfo();
                 startActivity(new Intent(Duchita.this, Login.class));
@@ -216,31 +224,62 @@ public class Duchita extends AppCompatActivity
         else if(id == R.id.nav_introduction){
             startActivity(new Intent(Duchita.this, Intro.class));
         }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    Runnable mStatusChecker = new Runnable() {
-        @Override
-        public void run() {
-            try {
-                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-                r.play();
-            }
-            finally {
-                mHandler.postDelayed(mStatusChecker, mInterval);
-            }
-        }
-    };
-
-    void startRepeatingTask() {
-        mStatusChecker.run();
+    void activarAlarma() {
+        agregarNotificacion();
     }
 
-    void stopRepeatingTask() {
-        mHandler.removeCallbacks(mStatusChecker);
+    void desactivarAlarma() {
+        cancelarNotificacion();
+    }
+
+    private void agregarNotificacion() {
+        if(!isActiveShampoo) {
+            mostrarNotificacion(getString(R.string.alarma), getString(R.string.alarma_normal), getString(R.string.alarma_modo_normal));
+        }
+        else {
+            mostrarNotificacion(getString(R.string.alarma), getString(R.string.alarma_shampoo), getString(R.string.alarma_modo_shampoo));
+        }
+    }
+
+    private void cancelarNotificacion() {
+        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(1);
+    }
+
+    private void mostrarNotificacion(String titulo, String min, String modo) {
+        String CHANNEL_ID = "Canal_1";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // SOPORTE PARA API 21 a 27
+            CharSequence name = "DuchitaApp";
+            int importance = NotificationManager.IMPORTANCE_LOW;
+            NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+            Notification notification = new Notification.Builder(this, CHANNEL_ID)
+                    .setSmallIcon(R.drawable.duchita)
+                    .setContentTitle(titulo)
+                    .setContentText(min)
+                    .setTicker(modo)
+                    .setChannelId(CHANNEL_ID)
+                    .setOngoing(true)
+                    .build();
+            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.createNotificationChannel(mChannel);
+            mNotificationManager.notify(1, notification);
+        }
+        else {
+            NotificationCompat.Builder b = new NotificationCompat.Builder(this, CHANNEL_ID);
+            b.setAutoCancel(true)
+                    .setSmallIcon(R.drawable.duchita)
+                    .setContentTitle(titulo)
+                    .setContentText(min)
+                    .setContentInfo(modo)
+                    .setChannelId(CHANNEL_ID)
+                    .setOngoing(true);
+            NotificationManager nm = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+            nm.notify(1, b.build());
+        }
     }
 }
