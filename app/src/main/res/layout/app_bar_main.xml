@@ -75,18 +75,18 @@
         tools:layout_editor_absoluteX="124dp"
         tools:layout_editor_absoluteY="432dp" />
 
-    <Chronometer
-        android:id="@+id/simpleChronometer"
+    <TextView
+        android:id="@+id/Cronometro"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center_vertical|center_horizontal"
         android:textSize="30sp"
+        android:text="00:00"
         app:layout_anchor="@+id/include"
         app:layout_anchorGravity="right|center"
         tools:layout_editor_absoluteX="184dp"
         tools:layout_editor_absoluteY="126dp" />
-
 
 
 </android.support.design.widget.CoordinatorLayout>

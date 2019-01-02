@@ -3,11 +3,13 @@ package com.esmifrase.duchita;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
@@ -22,21 +24,24 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Chronometer;
 import android.widget.TextView;
+
 import prefs.UserInfo;
 import prefs.UserSession;
 
 public class Duchita extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private Chronometer chronometer;
+    private TextView cronometro;
     private UserInfo userInfo;
     private UserSession userSession;
     private boolean isChronometerRunning = false;
     private boolean isActiveShampoo = false;
-    private static int Minutos = 0;
-    private static int MIntervalo = 5; // Cada cuánto se reproduce la alarma. (EN MINUTOS)
-    private long timeRunning = 0;
+    private static int Intervalo = 5; // Cada cuánto se reproduce la alarma. (MINUTOS)
+    private static int sIntervalo = 0; // Cada cuánto se reproduce la alarma. (SEGUNDOS)
+    private long startTime = 0L;
     private Context context = this;
+    private Handler timerhandler = new Handler();
+    private int Minutos = 0;
+    private int Segundos = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +65,7 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
         userInfo.setAntUsername(username);
 
         System.out.println(email+", "+username);
-        chronometer = findViewById(R.id.simpleChronometer);
+        cronometro = findViewById(R.id.Cronometro);
         FloatingActionButton fab = findViewById(R.id.fab);
         FloatingActionButton media = findViewById(R.id.media);
         FloatingActionButton shampoo = findViewById(R.id.shampoo);
@@ -69,33 +74,14 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
             @Override
             public void onClick(View view) {
                 if(!isChronometerRunning) {
-                    chronometer.setBase(SystemClock.elapsedRealtime());
-                    chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
-                    public void onChronometerTick(Chronometer chronometer) {
-                        String ss = chronometer.getText().charAt(3) + "" + chronometer.getText().charAt(4);
-                        int Segundos = Integer.parseInt(ss);
-                        if(Minutos == MIntervalo && Segundos == 0){ // Reproducir Sonido cada MIntervalo minutos
-                            MediaPlayer sonido = MediaPlayer.create(context, Settings.System.DEFAULT_NOTIFICATION_URI);
-                            sonido.start();
-                            sonido.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                                public void onCompletion(MediaPlayer sonido) {
-                                    sonido.release();
-                                }});
-                            System.out.println("\n*****\nSonido reproducido en: "+chronometer.getText());
-                            Minutos = 0;
-                        }
-                        if(Segundos == 59){
-                            Minutos++;
-                        }
-                    }});
-                    chronometer.start();
+                    startCronometro();
                     isChronometerRunning = true;
-                    activarAlarma();
+                    agregarNotificacion();
                 }
                 else{
-                    chronometer.stop();
+                    stopCronometro();
                     isChronometerRunning = false;
-                    desactivarAlarma();
+                    cancelarNotificacion();
                 }
             }
         });
@@ -110,43 +96,38 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
         shampoo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                isChronometerRunning = false;
+                stopCronometro();
                 if(!isActiveShampoo){
-                    chronometer.stop();
-                    chronometer.setBase(SystemClock.elapsedRealtime());
-                    MIntervalo = MIntervalo*2;
+                    Intervalo = Intervalo*2;
+                    sIntervalo = sIntervalo*2;
                     isActiveShampoo = true;
-                    isChronometerRunning = false;
-                    desactivarAlarma();
-                    Snackbar.make(view, "Modo Shampoo activado", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    cancelarNotificacion();
+                    Snackbar.make(view, "Modo Shampoo activado", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
                 else {
-                    chronometer.setBase(SystemClock.elapsedRealtime());
-                    MIntervalo = MIntervalo/2;
+                    Intervalo = Intervalo/2;
+                    sIntervalo = sIntervalo/2;
                     isActiveShampoo = false;
-                    isChronometerRunning = false;
-                    desactivarAlarma();
-                    Snackbar.make(view, "Modo Shampoo desactivado", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    cancelarNotificacion();
+                    Snackbar.make(view, "Modo Shampoo desactivado", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
             }
         });
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        View header=navigationView.getHeaderView(0);
+        View header = navigationView.getHeaderView(0);
         TextView tvUsername = header.findViewById(R.id.key_username);
         TextView tvEmail = header.findViewById(R.id.key_email);
 
         tvUsername.setText(username);
         tvEmail.setText(email);
-
     }
 
     @Override
@@ -161,26 +142,18 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
 
     @Override
     protected void onPause() {
-        timeRunning = SystemClock.elapsedRealtime() - chronometer.getBase();
-        chronometer.stop();
         super.onPause();
     }
 
     @Override
     protected void onResume() {
-        if (isChronometerRunning){
-            timeRunning = SystemClock.elapsedRealtime() - chronometer.getBase();
-            chronometer.setBase(SystemClock.elapsedRealtime() - timeRunning);
-            chronometer.start();
-        }
         super.onResume();
     }
 
     @Override
     public void onDestroy() {
-        desactivarAlarma();
+        cancelarNotificacion();
         super.onDestroy();
-
     }
 
     @Override
@@ -215,7 +188,7 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
             startActivity(new Intent(Duchita.this, Perfil.class));
         }
         else if (id == R.id.nav_manage) {
-                desactivarAlarma();
+                cancelarNotificacion();
                 userSession.setLoggedin(false);
                 userInfo.clearUserInfo();
                 startActivity(new Intent(Duchita.this, Login.class));
@@ -227,14 +200,6 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    void activarAlarma() {
-        agregarNotificacion();
-    }
-
-    void desactivarAlarma() {
-        cancelarNotificacion();
     }
 
     private void agregarNotificacion() {
@@ -252,8 +217,11 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
     }
 
     private void mostrarNotificacion(String titulo, String min, String modo) {
+        Intent intent = getIntent();
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         String CHANNEL_ID = "Canal_1";
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // SOPORTE PARA API 21 a 27
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // SOPORTE PARA API 24+
             CharSequence name = "DuchitaApp";
             int importance = NotificationManager.IMPORTANCE_LOW;
             NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
@@ -263,6 +231,8 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
                     .setContentText(min)
                     .setTicker(modo)
                     .setChannelId(CHANNEL_ID)
+                    .setUsesChronometer(true)
+                    .setContentIntent(pIntent)
                     .setOngoing(true)
                     .build();
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -277,9 +247,57 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
                     .setContentText(min)
                     .setContentInfo(modo)
                     .setChannelId(CHANNEL_ID)
+                    .setUsesChronometer(true)
+                    .setContentIntent(pIntent)
                     .setOngoing(true);
             NotificationManager nm = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
             nm.notify(1, b.build());
         }
+    }
+
+    public void startCronometro(){
+        Segundos = 0;
+        Minutos = 0;
+        startTime = SystemClock.uptimeMillis();
+        timerhandler.postDelayed(timerRunnable,0);
+    }
+
+    public void stopCronometro(){
+        timerhandler.removeCallbacks(timerRunnable);
+    }
+
+    final Runnable timerRunnable = new Runnable(){
+        @Override
+        public void run() {
+            long timeMilliseconds = SystemClock.uptimeMillis() - startTime;
+            long timeSwapBuff = 0L;
+            long updateTime = timeSwapBuff + timeMilliseconds;
+            int seg = (int)(updateTime /1000);
+            int min = seg/60;
+            seg %= 60;
+            cronometro.setText(String.format("%02d",min)+":"+String.format("%02d",seg));
+            if (seg == 59){
+                Minutos++;
+                if(Minutos != Intervalo){
+                    Minutos = 0;
+                }
+            }
+            if(Minutos == Intervalo && Segundos == sIntervalo){
+                reproducirSonido();
+                System.out.println("Se reprodució el sonido en: " + String.format("%02d",min)+":"+String.format("%02d",seg));
+                Segundos = 0;
+            }
+            Segundos++;
+            timerhandler.postDelayed(timerRunnable,1000);
+        }
+    };
+
+    public void reproducirSonido(){
+        MediaPlayer sonido = MediaPlayer.create(context, Settings.System.DEFAULT_NOTIFICATION_URI);
+        sonido.start();
+        sonido.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            public void onCompletion(MediaPlayer sonido) {
+                sonido.release();
+            }});
     }
 }
