@@ -34,8 +34,8 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
     private UserSession userSession;
     private boolean isChronometerRunning = false;
     private boolean isActiveShampoo = false;
-    private static int Intervalo = 0; // Cada cuánto se reproduce la alarma. (MINUTOS)
-    private static int sIntervalo = 5; // Cada cuánto se reproduce la alarma. (SEGUNDOS)
+    private static int Intervalo = 5; // Cada cuánto se reproduce la alarma. (MINUTOS)
+    private static int sIntervalo = 0; // Cada cuánto se reproduce la alarma. (SEGUNDOS)
     private Context context = this;
     private Handler timerhandler = new Handler();
     private int Minutos, min = 0;
