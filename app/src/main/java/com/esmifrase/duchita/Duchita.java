@@ -288,6 +288,9 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
                 }
                 contador++;
             }
+            else{
+                contador = 0;
+            }
             if(sIntervalo != 0 && Intervalo == 0){
                 if (seg % sIntervalo == 0 && !reproducido) {
                     if (min != 0 || seg != 0) {
@@ -319,7 +322,6 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
             }});
         System.out.println("Se reprodució el sonido en: " + min + ":" + String.format("%02d", seg) + ":" + String.format("%03d", milliseg));
         reproducido = true;
-        contador = 0;
         Minutos = 0;
     }
 }
