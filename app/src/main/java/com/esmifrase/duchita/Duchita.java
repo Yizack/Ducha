@@ -10,6 +10,7 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -34,12 +35,13 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
     private UserSession userSession;
     private boolean isChronometerRunning = false;
     private boolean isActiveShampoo = false;
+    private boolean reproducido = false;
     private static int Intervalo = 5; // Cada cuánto se reproduce la alarma. (MINUTOS)
-    private static int sIntervalo = 0; // Cada cuánto se reproduce la alarma. (SEGUNDOS)
+    private static int sIntervalo = 0; // Cada cuánto se reproduce la alarma. (SEGUNDOS de 0 a 59)
     private Context context = this;
     private Handler timerhandler = new Handler();
-    private int Minutos, min = 0;
-    private int Segundos, seg = 0;
+    private int Minutos = 0, contador = 0;
+    private long StartTime = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -230,6 +232,7 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
                     .setChannelId(CHANNEL_ID)
                     .setUsesChronometer(true)
                     .setContentIntent(pIntent)
+                    .setAutoCancel(false)
                     .setOngoing(true)
                     .build();
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -246,6 +249,7 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
                     .setChannelId(CHANNEL_ID)
                     .setUsesChronometer(true)
                     .setContentIntent(pIntent)
+                    .setAutoCancel(false)
                     .setOngoing(true);
             NotificationManager nm = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
             nm.notify(1, b.build());
@@ -254,9 +258,9 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
 
     public void startCronometro(){
         Minutos = 0;
-        min = 0;
-        Segundos = 0;
-        seg = 0;
+        contador = 0;
+        reproducido = false;
+        StartTime = SystemClock.uptimeMillis();
         timerhandler.postDelayed(timerRunnable,0);
     }
 
@@ -267,32 +271,55 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
     final Runnable timerRunnable = new Runnable(){
         @Override
         public void run() {
-            min = seg/60;
+            long timeInMilliseconds = SystemClock.uptimeMillis() - StartTime;
+            long timesSwapBuff = 0L;
+            long updateTime = timesSwapBuff + timeInMilliseconds;
+            int seg = (int)(updateTime /1000);
+            int min = seg/60;
+            seg%=60;
+            int milliseg = (int)(updateTime %1000);
             if(min > 99)
-                cronometro.setText(min+":"+String.format("%02d",seg%60));
+                cronometro.setText(min+":"+String.format("%02d",seg));
             else
-                cronometro.setText(String.format("%02d",min)+":"+String.format("%02d",seg%60));
-            if (Segundos == 59){
-                Minutos++;min++;
-                if(Minutos != Intervalo)
-                    Minutos = 0;
+                cronometro.setText(String.format("%02d",min)+":"+String.format("%02d",seg));
+            if(seg == 59){
+                if(contador == 0) {
+                    Minutos++;
+                }
+                contador++;
             }
-            if(Minutos == Intervalo && Segundos == sIntervalo){
-                reproducirSonido();
-                System.out.println("Se reprodució el sonido en: " + String.format("%02d",min)+":"+String.format("%02d",seg%60));
-                Segundos = 0;
+            if(sIntervalo != 0 && Intervalo == 0){
+                if (seg % sIntervalo == 0 && !reproducido) {
+                    if (min != 0 || seg != 0) {
+                        reproducirSonido(min, seg, milliseg);
+                    }
+                }
+                else if (seg%sIntervalo != 0) {
+                    reproducido = false;
+                }
             }
-            Segundos++;seg++;
-            timerhandler.postDelayed(timerRunnable,1000);
+            else {
+                if (Minutos == Intervalo && seg == sIntervalo && !reproducido) {
+                    reproducirSonido(min, seg, milliseg);
+                }
+                else if (seg != sIntervalo) {
+                    reproducido = false;
+                }
+            }
+            timerhandler.postDelayed(timerRunnable,0);
         }
     };
 
-    public void reproducirSonido(){
+    public void reproducirSonido(int min, int seg, int milliseg){
         MediaPlayer sonido = MediaPlayer.create(context, Settings.System.DEFAULT_NOTIFICATION_URI);
         sonido.start();
         sonido.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             public void onCompletion(MediaPlayer sonido) {
                 sonido.release();
             }});
+        System.out.println("Se reprodució el sonido en: " + min + ":" + String.format("%02d", seg) + ":" + String.format("%03d", milliseg));
+        reproducido = true;
+        contador = 0;
+        Minutos = 0;
     }
 }
