@@ -35,7 +35,7 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
     public boolean isChronometerRunning = false;
     private boolean isActiveShampoo = false;
     public static int Intervalo = 5; // Cada cuánto se reproduce la alarma. (MINUTOS)
-    public static int sIntervalo = 0; // Cada cuánto se reproduce la alarma. (SEGUNDOS)
+    public static int sIntervalo = 0; // Cada cuánto se reproduce la alarma. (SEGUNDOS) de 0 a 59
     private Intent intent_service;
 
     @Override
@@ -157,6 +157,7 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
     @Override
     public void onDestroy() {
         cancelarNotificacion();
+        stopService(intent_service);
         super.onDestroy();
     }
 
