@@ -4,7 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class Hash256 {
-
+    // Hash para encriptar contraseñas.
     public static String sha256(String input) throws NoSuchAlgorithmException{
         MessageDigest mDigest = MessageDigest.getInstance("SHA-256");
         byte[] result = mDigest.digest(input.getBytes());
@@ -15,4 +15,3 @@ public class Hash256 {
         return sb.toString();
     }
 }
-
