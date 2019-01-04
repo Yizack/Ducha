@@ -51,7 +51,7 @@ public class Cronometro extends Service {
         super.onDestroy();
         stopCronometro(); // Parar cronómetro
         stopSelf(); // Parar servicio Cronometro.java
-        Log.e("Service finish","Finish");
+        Log.e("Servicio","Se detuvo el servicio");
     }
 
     private void enviarTexto(String texto_cronometro){
