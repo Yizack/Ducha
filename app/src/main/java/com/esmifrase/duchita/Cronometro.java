@@ -18,7 +18,7 @@ public class Cronometro extends Service {
     private Handler timerhandler = new Handler();
     private Intent intent;
     private Context context = this;
-    public static String receiver = "com.esmifrase.duchita.Duchita";
+    public static String receiver = "recibir.accion";
     public MediaPlayer sonido;
 
     @Nullable
@@ -49,8 +49,7 @@ public class Cronometro extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        stopCronometro(); // Parar cronómetro
-        stopSelf(); // Parar servicio Cronometro.java
+        stopCronometro(); // Parar cronómetro.
         Log.e("Servicio","Se detuvo el servicio");
     }
 
