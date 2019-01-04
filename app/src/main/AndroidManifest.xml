@@ -29,5 +29,6 @@
             android:theme="@style/AppTheme.Dark"/>
         <activity android:name="com.esmifrase.duchita.Intro"
             android:label="Intro"/>
+        <service android:enabled="true" android:name="com.esmifrase.duchita.Cronometro" />
     </application>
 </manifest>
