@@ -1,7 +1,10 @@
 [![Build Status](https://travis-ci.com/Yizack/duchita.svg?branch=master)](https://travis-ci.com/Yizack/duchita)
 # Duchita
-Proyecto de Android Studio - Cronómetro/Alarma para android
+Proyecto de Android Studio - Cronómetro/Alarma para ahorrar agua en la ducha.
 #
+## Introducción
+DuchitaApp es una aplicación para celulares Android desarrollada por estudiantes de la Universidad Tecnológica con el fin de aportar una forma de ahorro de agua mediante el uso de un cronómetro que indica el tiempo que una persona ha permanecido en el baño y con un sonido de notificación que se activa en un intervalo de 5 minutos (en **Modo Normal**) o 10 minutos (en **Modo Shampoo**), éste es considerado el tiempo normal de ducha de una persona.
+##
 ## Requerimientos
 - Hosting con PHP y MySQL
 - Java 8 o más
