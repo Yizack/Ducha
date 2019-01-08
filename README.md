@@ -10,7 +10,7 @@ DuchitaApp es una aplicación para celulares Android desarrollada por estudiante
 - Hosting con PHP y MySQL
 - Java 8 o más
 - Android Studio 3.2.1
-  - SDK Versión 26
+  - SDK Versión 28
   - BuildTools Versión 28.0.3
 ##
 ## Configuración
