@@ -30,50 +30,47 @@
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="88dp"
-        android:layout_height="119dp"
+        android:layout_height="88dp"
         android:layout_gravity="bottom|center"
         android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/clock2"
         android:tint="@color/colorBlanco"
         app:backgroundTint="@color/colorAccent"
         app:borderWidth="0dp"
         app:elevation="0dp"
+        app:fabCustomSize="88dp"
         app:fabSize="normal"
-        app:rippleColor="@color/colorBlanco"
-        app:srcCompat="@drawable/clock2"
-        tools:layout_editor_absoluteX="124dp"
-        tools:layout_editor_absoluteY="432dp" />
+        app:maxImageSize="56dp" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/media"
         android:layout_width="88dp"
-        android:layout_height="119dp"
+        android:layout_height="88dp"
         android:layout_gravity="bottom|center|end"
         android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/player"
         android:tint="@color/colorBlanco"
         app:backgroundTint="@color/colorAccent2"
         app:borderWidth="0dp"
         app:elevation="0dp"
+        app:fabCustomSize="88dp"
         app:fabSize="normal"
-        app:rippleColor="@color/colorBlanco"
-        app:srcCompat="@drawable/player"
-        tools:layout_editor_absoluteX="124dp"
-        tools:layout_editor_absoluteY="432dp" />
+        app:maxImageSize="56dp" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/shampoo"
         android:layout_width="88dp"
-        android:layout_height="119dp"
+        android:layout_height="88dp"
         android:layout_gravity="bottom|center|start"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_margin="16dp"
+        android:src="@drawable/shampoo"
         android:tint="@color/colorBlanco"
         app:backgroundTint="@color/colorAccent3"
         app:borderWidth="0dp"
         app:elevation="0dp"
+        app:fabCustomSize="88dp"
         app:fabSize="normal"
-        app:rippleColor="@color/colorBlanco"
-        app:srcCompat="@drawable/shampoo"
-        tools:layout_editor_absoluteX="124dp"
-        tools:layout_editor_absoluteY="432dp" />
+        app:maxImageSize="56dp" />
 
     <TextView
         android:id="@+id/Cronometro"
