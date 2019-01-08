@@ -226,7 +226,7 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         String CHANNEL_ID = "Canal_1";
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // SOPORTE PARA API 24+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // SOPORTE DE NOTIFICACIONES PARA API 21+
             CharSequence name = "DuchitaApp";
             int importance = NotificationManager.IMPORTANCE_LOW;
             NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
