@@ -41,14 +41,14 @@ public class Perfil extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
 
         userInfo        = new UserInfo(this);
         userSession     = new UserSession(this);
-        tvUsername      = (TextView)findViewById(R.id.key_username);
-        tvEmail         = (TextView)findViewById(R.id.key_email);
-        tvEditUsername = (EditText)findViewById(R.id.key_editusername);
-        tvEditEmail = (EditText)findViewById(R.id.key_editemail);
+        tvUsername      = findViewById(R.id.key_username);
+        tvEmail         = findViewById(R.id.key_email);
+        tvEditUsername = findViewById(R.id.key_editusername);
+        tvEditEmail = findViewById(R.id.key_editemail);
 
         if(!userSession.isUserLoggedin()){
             startActivity(new Intent(this, Login.class));
@@ -61,8 +61,7 @@ public class Perfil extends AppCompatActivity {
         if(!email.equals(userInfo.getKeyAntEmail()) || !username.equals(userInfo.getKeyAntUsername())){
             userInfo.setAntEmail(email);
             userInfo.setAntUsername(username);
-            Snackbar.make(findViewById(android.R.id.content), "Los cambios han sido guardados.", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+            Snackbar.make(findViewById(android.R.id.content), "Los cambios han sido guardados.", Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
 
         tvEmail.setText(email);
@@ -80,7 +79,7 @@ public class Perfil extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,7 +89,7 @@ public class Perfil extends AppCompatActivity {
                 String antusername = username;
 
                 if(isEdit == true){
-                    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+                    FloatingActionButton fab = findViewById(R.id.fab);
                     fab.setImageResource(R.drawable.save);
                     tvUsername.setVisibility(View.INVISIBLE);
                     tvEmail.setVisibility(View.INVISIBLE);
@@ -100,12 +99,11 @@ public class Perfil extends AppCompatActivity {
 
                     tvEditUsername.setText(username);
                     tvEditEmail.setText(email);
-                    Snackbar.make(view, "Realiza los cambios deseados", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    Snackbar.make(view, "Realiza los cambios deseados", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                     isEdit = false;
                 }
                 else{
-                    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+                    FloatingActionButton fab = findViewById(R.id.fab);
                     fab.setImageResource(R.drawable.pencil);
                     isEdit = true;
                     tvUsername.setVisibility(View.VISIBLE);
@@ -146,8 +144,7 @@ public class Perfil extends AppCompatActivity {
                         // Si hay errores los marca y no guarda los cambios
                         focusView.requestFocus();
                         hideKeyboard();
-                        Snackbar.make(view, "Error: No se guardaron los cambios.\nVuelve a editar para verificar los errores.", Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
+                        Snackbar.make(view, "Error: No se guardaron los cambios.\nVuelve a editar para verificar los errores.", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                     } else {
                         // Guardar cambios
                         if(email.equals(userInfo.getKeyAntEmail()) || username.equals(userInfo.getKeyAntUsername()) ){
@@ -172,10 +169,6 @@ public class Perfil extends AppCompatActivity {
 
     private boolean isEmailValid(String email) {
         return email.contains("@") && email.contains(".");
-    }
-
-    private boolean isPasswordValid(String password) {
-        return password.length() > 4;
     }
 
     private boolean isUsernameValid(String username) {

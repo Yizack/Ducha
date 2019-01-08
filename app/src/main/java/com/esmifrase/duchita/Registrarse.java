@@ -155,7 +155,7 @@ public class Registrarse extends AppCompatActivity {
 
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "Register Response: " + response.toString());
+                Log.d(TAG, "Register Response: " + response);
 
                 try {
                     JSONObject jObj = new JSONObject(response);

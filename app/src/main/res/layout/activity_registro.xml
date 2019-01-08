@@ -21,7 +21,6 @@
             android:src="@drawable/imagen"
             android:scaleType="centerCrop"/>
 
-
         <LinearLayout
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
@@ -48,7 +47,6 @@
                 android:inputType="textEmailAddress"
                 android:hint="@string/hint_email"/>
 
-
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -57,7 +55,6 @@
                 android:inputType="textPassword"
                 android:id="@+id/password"
                 android:hint="@string/hint_password" />
-
 
             <Button
                 android:layout_width="match_parent"
@@ -74,11 +71,6 @@
                 android:text="¿Ya tienes una cuenta? Ingresa"
                 android:gravity="center"
                 android:textSize="16dip"/>
-
         </LinearLayout>
-
-
-
-
     </LinearLayout>
 </ScrollView>
