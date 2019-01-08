@@ -59,3 +59,6 @@ DuchitaApp es una aplicación para celulares Android desarrollada por estudiante
    - Crea un APK en la sección de pestañas `Build > Build Bundle(s) / APK(s) >Build APK(s)` y se generará una ventana pequeña en la parte inferior derecha de la pantalla, luego presiona `locate` para localizar el APK y se abrirá la ubicación del APK en el explorador de Windows.
    - Copia y pega el APK en tu celular e instalalo.
    - También puedes utilizar un Dispositivo Virtual para probar tu app dentro de Android Studio.
+##
+## Demo
+Si quieres probar la app en tu celular, descarga el APK en [`duchita.apk`](https://github.com/Yizack/duchita/raw/master/apk/duchita.apk)
