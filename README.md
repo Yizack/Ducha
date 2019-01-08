@@ -6,6 +6,9 @@ Probado en las versiones de Android 5.1 Lollipop *(API 22)* hasta Android 8.1 Or
 ## Introducción
 DuchitaApp es una aplicación para celulares Android desarrollada por estudiantes de la Universidad Tecnológica con el fin de aportar una forma de ahorro de agua mediante el uso de un cronómetro que indica el tiempo que una persona ha permanecido en el baño y con un sonido de notificación que se activa en un intervalo de 5 minutos (en **Modo Normal**) o 10 minutos (en **Modo Shampoo**), éste es considerado el tiempo normal de ducha de una persona.
 ##
+## Demo
+Si quieres probar la app, descarga el APK en tu celular [`duchita.apk`](https://github.com/Yizack/duchita/raw/master/apk/duchita.apk)
+##
 ## Requerimientos
 - Hosting con PHP y MySQL
 - Java 8 o más
@@ -59,6 +62,3 @@ DuchitaApp es una aplicación para celulares Android desarrollada por estudiante
    - Crea un APK en la sección de pestañas `Build > Build Bundle(s) / APK(s) >Build APK(s)` y se generará una ventana pequeña en la parte inferior derecha de la pantalla, luego presiona `locate` para localizar el APK y se abrirá la ubicación del APK en el explorador de Windows.
    - Copia y pega el APK en tu celular e instalalo.
    - También puedes utilizar un Dispositivo Virtual para probar tu app dentro de Android Studio.
-##
-## Demo
-Si quieres probar la app en tu celular, descarga el APK en [`duchita.apk`](https://github.com/Yizack/duchita/raw/master/apk/duchita.apk)
