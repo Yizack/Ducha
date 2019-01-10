@@ -124,7 +124,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
 
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "Login" + response.toString());
+                Log.d(TAG, "Login" + response);
 
                 try {
                     JSONObject jObj = new JSONObject(response);
