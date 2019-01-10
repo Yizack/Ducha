@@ -1,7 +1,6 @@
 package com.esmifrase.duchita;
 
 import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -54,7 +53,7 @@ public class Cronometro extends Service {
                     break;
             }
         }
-        return super.onStartCommand(intent, flags, startId);
+        return START_NOT_STICKY;
     }
 
     public void startCronometro() {
@@ -144,9 +143,6 @@ public class Cronometro extends Service {
         PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
         String CHANNEL_ID = "Canal_1";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // SOPORTE DE NOTIFICACIONES PARA API 21+
-            CharSequence name = "DuchitaApp";
-            int importance = NotificationManager.IMPORTANCE_LOW;
-            NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
             Notification notification = new Notification.Builder(this, CHANNEL_ID)
                     .setSmallIcon(R.drawable.duchita)
                     .setContentTitle(titulo)
@@ -158,9 +154,6 @@ public class Cronometro extends Service {
                     .setAutoCancel(false)
                     .setOngoing(true)
                     .build();
-            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.createNotificationChannel(mChannel);
-            mNotificationManager.notify(1, notification);
             startForeground(1, notification);
         }
         else {
@@ -175,8 +168,8 @@ public class Cronometro extends Service {
                     .setContentIntent(pIntent)
                     .setAutoCancel(false)
                     .setOngoing(true);
-            NotificationManager nm = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-            nm.notify(1, b.build());
+            Notification notification = b.build();
+            startForeground(1, notification);
         }
     }
 
