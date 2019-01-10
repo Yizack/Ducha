@@ -21,7 +21,7 @@ if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['antemai
 		echo json_encode($response);
 	}
 	else {
-	    $user = update($username, $email, $antemail); // update user
+		$user = update($username, $email, $antemail); // update user
 		$response["error"] = FALSE;
 		$response["user"]["id"] = $user["id"];
 		$response["user"]["email"] = $user["email"];
