@@ -191,30 +191,31 @@ public class Perfil extends AppCompatActivity {
 
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "Update Response: " + response.toString());
+                Log.d(TAG, "Update Response: " + response);
                 try {
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
                     if (!error) {
-                        JSONObject user = jObj.getJSONObject("user");
+                        tvEmail.setText(email);
+                        tvUsername.setText(username);
+                        userInfo.setEmail(email);
+                        userInfo.setUsername(username);
+                        userInfo.setAntEmail(antemail);
+                        userInfo.setAntUsername(antusername);
+                        Intent intent = new Intent(Perfil.this, Duchita.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivityForResult(intent, 0);
+                        overridePendingTransition(0, 0);
+                        startActivity(new Intent(Perfil.this, Perfil.class));
+                        finish();
                     } else {
                         String errorMsg = jObj.getString("error_msg");
                         toast(errorMsg);
                     }
                 } catch (JSONException e) {
+                    // JSON error
                     e.printStackTrace();
-                    tvEmail.setText(email);
-                    tvUsername.setText(username);
-                    userInfo.setEmail(email);
-                    userInfo.setUsername(username);
-                    userInfo.setAntEmail(antemail);
-                    userInfo.setAntUsername(antusername);
-                    Intent intent = new Intent(Perfil.this, Duchita.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivityForResult(intent, 0);
-                    overridePendingTransition(0, 0);
-                    startActivity(new Intent(Perfil.this, Perfil.class));
-                    finish();
+                    toast("Json error: " + e.getMessage());
                 }
             }
         }, new Response.ErrorListener() {
@@ -228,7 +229,7 @@ public class Perfil extends AppCompatActivity {
 
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to update url
                 Map<String, String> params = new HashMap<>();
                 System.out.println(username+" "+email+" "+antemail+" "+antusername);
                 params.put("username", username);

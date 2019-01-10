@@ -10,29 +10,23 @@ if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['antemai
 	$email = $_POST['email'];
 	$antemail = $_POST['antemail'];
 	$antusername = $_POST['antusername'];
-	
-	if(usernameExists($username) || emailExists($email)){
-		if(usernameExists($username) && $username !== $antusername ){
-				$response["error"] = TRUE;
-				$response["error_msg"] = "El usuario no está disponible " . $username;
-				echo json_encode($response);
-		}
-		elseif(emailExists($email) && $email !== $antemail ){
-				$response["error"] = TRUE;
-				$response["error_msg"] = "El correo no está disponible " . $email;
-				echo json_encode($response);
-		}
-		else{
-			if(!usernameExists($username)){
-				update($username, $email, $antemail);
-			}
-			elseif(!emailExists($email)){
-				update($username, $email, $antemail);
-			}
-		}
+	if(usernameExists($username) && $username !== $antusername){
+		$response["error"] = TRUE;
+		$response["error_msg"] = "El usuario no está disponible " . $username;
+		echo json_encode($response);
+    }
+	elseif(emailExists($email) && $email !== $antemail){
+		$response["error"] = TRUE;
+		$response["error_msg"] = "El correo no está disponible " . $email;
+		echo json_encode($response);
 	}
-	else{// update user
-        $user = update($username, $email, $antemail);
+	else {
+	    $user = update($username, $email, $antemail); // update user
+		$response["error"] = FALSE;
+		$response["user"]["id"] = $user["id"];
+        $response["user"]["email"] = $user["email"];
+        $response["user"]["username"] = $user["username"];
+        echo json_encode($response);
 	}
 }
 else {
