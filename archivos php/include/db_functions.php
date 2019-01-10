@@ -4,8 +4,19 @@
 	function update($username, $email, $antemail) {
 		global $connection;
 		$query = "UPDATE users SET username = '{$username}', email = '{$email}' WHERE email = '{$antemail}'";
-
 		$result = mysqli_query($connection, $query);
+		
+		if($result){
+			$user = "SELECT * FROM users WHERE email = '{$email}'";
+			$res = mysqli_query($connection, $user);
+			
+			while ($user = mysqli_fetch_assoc($res)){
+				return $user;
+			}
+		}
+		else{
+			return false;
+		}
 	}
 
 	function storeUser($username, $email, $password){
