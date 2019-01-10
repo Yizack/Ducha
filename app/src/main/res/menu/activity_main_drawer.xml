@@ -13,11 +13,11 @@
             android:icon="@drawable/ic_remote_view_play"
             android:title="Guía" />
         <item
-            android:id="@+id/nav_introduction"
+            android:id="@+id/nav_introduccion"
             android:icon="@drawable/ic_star_black"
             android:title="Introducción" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_salir"
             android:icon="@android:drawable/ic_delete"
             android:title="Salir" />
     </group>
