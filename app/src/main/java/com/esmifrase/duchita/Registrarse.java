@@ -174,7 +174,7 @@ public class Registrarse extends AppCompatActivity {
                         startActivity(new Intent(Registrarse.this, Duchita.class));
                         startActivity(new Intent(Registrarse.this, Intro.class));
                     } else {
-                        // Errorr en inicio muestra un mensaje
+                        // Error en inicio muestra un mensaje
                         String errorMsg = jObj.getString("error_msg");
                         toast(errorMsg);
                     }
