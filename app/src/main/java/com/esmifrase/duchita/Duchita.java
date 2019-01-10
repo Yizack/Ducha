@@ -3,6 +3,7 @@ package com.esmifrase.duchita;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.content.BroadcastReceiver;
 import android.support.design.widget.FloatingActionButton;
@@ -135,14 +136,14 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(br, new IntentFilter(Cronometro.receiver));
+        context.registerReceiver(br, new IntentFilter(Cronometro.receiver));
         Log.i("Duchita", "Broadcast receiver registrado.");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(br);
+        context.unregisterReceiver(br);
         Log.i("Duchita", "Broadcast receiver no registrado.");
     }
 
@@ -200,6 +201,9 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
 
     public void servicio(String accion){
         intent_service.setAction(accion);
-        context.startService(intent_service);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            context.startForegroundService(intent_service);
+        else
+            context.startService(intent_service);
     }
 }
