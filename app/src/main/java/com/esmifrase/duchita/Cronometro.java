@@ -22,17 +22,23 @@ public class Cronometro extends Service {
     private long TiempoInicial = 0L;
     private boolean reproducido = false;
     private Handler timerhandler = new Handler();
-    private Intent intent;
     private Context context = this;
     public static final String receiver = "recibir.accion";
     public static final String START = "START";
     public static final String STOP = "STOP";
     public MediaPlayer sonido;
+    Intent intent;
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        intent = new Intent(receiver);
     }
 
     @Override
@@ -118,7 +124,6 @@ public class Cronometro extends Service {
 
     private void iniciarForegroundService() {
         Log.i("Servicio","Se inició el servicio");
-        intent = new Intent(receiver);
         startCronometro(); // Empezar cronómetro
         if(!Duchita.isActiveShampoo)
             mostrarNotificacion(getString(R.string.alarma), getString(R.string.alarma_normal), getString(R.string.alarma_modo_normal));

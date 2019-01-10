@@ -127,11 +127,8 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
     private BroadcastReceiver br = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if(action.equals("recibir.accion")) {
                 String texto_cronometro = intent.getStringExtra("tiempo");
                 cronometro.setText(texto_cronometro);
-            }
         }
     };
 
@@ -139,12 +136,14 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
     protected void onResume() {
         super.onResume();
         registerReceiver(br, new IntentFilter(Cronometro.receiver));
+        Log.i("Duchita", "Broadcast receiver registrado.");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         unregisterReceiver(br);
+        Log.i("Duchita", "Broadcast receiver no registrado.");
     }
 
     @Override
