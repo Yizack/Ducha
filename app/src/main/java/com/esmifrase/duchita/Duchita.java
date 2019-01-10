@@ -1,19 +1,13 @@
 package com.esmifrase.duchita;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
 import android.os.Bundle;
 import android.content.BroadcastReceiver;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -33,10 +27,11 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
     private UserInfo userInfo;
     private UserSession userSession;
     public boolean isChronometerRunning = false;
-    private boolean isActiveShampoo = false;
+    public static boolean isActiveShampoo = false;
     public static int Intervalo = 5; // Cada cuánto se reproduce la alarma. (MINUTOS)
     public static int sIntervalo = 0; // Cada cuánto se reproduce la alarma. (SEGUNDOS) de 0 a 59
     private Intent intent_service;
+    private Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,19 +58,16 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
         FloatingActionButton media = findViewById(R.id.media);
         FloatingActionButton shampoo = findViewById(R.id.shampoo);
         intent_service = new Intent(getApplicationContext(), Cronometro.class);
-
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(!isChronometerRunning) {
                     isChronometerRunning = true;
-                    startService(intent_service);
-                    agregarNotificacion();
+                    servicio(Cronometro.START);
                 }
                 else{
                     isChronometerRunning = false;
-                    stopService(intent_service);
-                    cancelarNotificacion();
+                    servicio(Cronometro.STOP);
                 }
             }
         });
@@ -91,8 +83,7 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
             @Override
             public void onClick(View view) {
                 isChronometerRunning = false;
-                stopService(intent_service);
-                cancelarNotificacion();
+                servicio(Cronometro.STOP);
                 if(!isActiveShampoo){
                     Intervalo = Intervalo*2;
                     sIntervalo = sIntervalo*2;
@@ -159,8 +150,7 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
     @Override
     public void onDestroy() {
         super.onDestroy();
-        cancelarNotificacion();
-        stopService(intent_service);
+        servicio(Cronometro.STOP);
     }
 
     @Override
@@ -194,14 +184,14 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
         if (id == R.id.nav_perfil) {
             startActivity(new Intent(Duchita.this, Perfil.class));
         }
-        else if (id == R.id.nav_manage) {
-                cancelarNotificacion();
+        else if (id == R.id.nav_salir) {
                 userSession.setLoggedin(false);
                 userInfo.clearUserInfo();
+                servicio(Cronometro.STOP);
                 startActivity(new Intent(Duchita.this, Login.class));
                 finish();
         }
-        else if(id == R.id.nav_introduction){
+        else if(id == R.id.nav_introduccion){
             startActivity(new Intent(Duchita.this, Intro.class));
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -209,56 +199,8 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
         return true;
     }
 
-    private void agregarNotificacion() {
-        if(!isActiveShampoo)
-            mostrarNotificacion(getString(R.string.alarma), getString(R.string.alarma_normal), getString(R.string.alarma_modo_normal));
-        else
-            mostrarNotificacion(getString(R.string.alarma), getString(R.string.alarma_shampoo), getString(R.string.alarma_modo_shampoo));
-    }
-
-    private void cancelarNotificacion() {
-        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancel(1);
-    }
-
-    private void mostrarNotificacion(String titulo, String min, String modo) {
-        Intent intent = getIntent();
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        String CHANNEL_ID = "Canal_1";
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // SOPORTE DE NOTIFICACIONES PARA API 21+
-            CharSequence name = "DuchitaApp";
-            int importance = NotificationManager.IMPORTANCE_LOW;
-            NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
-            Notification notification = new Notification.Builder(this, CHANNEL_ID)
-                    .setSmallIcon(R.drawable.duchita)
-                    .setContentTitle(titulo)
-                    .setContentText(min)
-                    .setTicker(modo)
-                    .setChannelId(CHANNEL_ID)
-                    .setUsesChronometer(true)
-                    .setContentIntent(pIntent)
-                    .setAutoCancel(false)
-                    .setOngoing(true)
-                    .build();
-            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.createNotificationChannel(mChannel);
-            mNotificationManager.notify(1, notification);
-        }
-        else {
-            NotificationCompat.Builder b = new NotificationCompat.Builder(this, CHANNEL_ID);
-            b.setAutoCancel(true)
-                    .setSmallIcon(R.drawable.duchita)
-                    .setContentTitle(titulo)
-                    .setContentText(min)
-                    .setContentInfo(modo)
-                    .setChannelId(CHANNEL_ID)
-                    .setUsesChronometer(true)
-                    .setContentIntent(pIntent)
-                    .setAutoCancel(false)
-                    .setOngoing(true);
-            NotificationManager nm = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-            nm.notify(1, b.build());
-        }
+    public void servicio(String accion){
+        intent_service.setAction(accion);
+        context.startService(intent_service);
     }
 }
