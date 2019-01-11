@@ -17,7 +17,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 public class Cronometro extends Service {
-    private int Minutos = 0, contador = 0;
+    private int Minutos = -1, contador = 0;
     private long TiempoInicial = 0L;
     private boolean reproducido = false;
     private Handler timerhandler = new Handler();
@@ -57,7 +57,7 @@ public class Cronometro extends Service {
     }
 
     public void startCronometro() {
-        Minutos = 0; // Inicializar minuto verificador de intervalo a 0
+        Minutos = -1; // Inicializar minuto verificador de intervalo a 0
         contador = 0; // Inicializar contador a 0
         reproducido = false; // No se ha reproducido el sonido
         TiempoInicial = SystemClock.elapsedRealtime(); // Capturar tiempo del sistema
@@ -79,8 +79,8 @@ public class Cronometro extends Service {
             seg %= 60; // Segundos en base 60.
             String texto_cronometro = String.format("%02d", min) + ":" + String.format("%02d", seg);
             enviarTexto(texto_cronometro); // Enviar valor del cronómetro al TextView cronometro en Duchita.java.
-            if (seg == 59) { // Si los segundos llegan a 59.
-                if (contador == 0) // Evita que se sumen varios minutos cuando seg es 59 en varios milisegundos.
+            if (seg == 0) { // Si los segundos llegan a 0.
+                if (contador == 0) // Evita que se sumen varios minutos cuando seg es 0 en varios milisegundos.
                     Minutos++; // Sumar un minuto.
                 contador++; // Capturar las veces que seg es igual a 59 en los milisegundos para evitar sumar muchos minutos.
             }
