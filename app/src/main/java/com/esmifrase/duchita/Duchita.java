@@ -83,8 +83,9 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
         shampoo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(isChronometerRunning)
+                    servicio(Cronometro.STOP);
                 isChronometerRunning = false;
-                servicio(Cronometro.STOP);
                 if(!isActiveShampoo){
                     Intervalo = Intervalo*2;
                     sIntervalo = sIntervalo*2;
