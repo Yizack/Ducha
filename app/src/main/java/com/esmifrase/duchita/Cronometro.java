@@ -17,7 +17,6 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 public class Cronometro extends Service {
-    private int Minutos = -1, contador = 0;
     private long TiempoInicial = 0L;
     private boolean reproducido = false;
     private Handler timerhandler = new Handler();
@@ -57,8 +56,6 @@ public class Cronometro extends Service {
     }
 
     public void startCronometro() {
-        Minutos = -1; // Inicializar minuto verificador de intervalo a 0
-        contador = 0; // Inicializar contador a 0
         reproducido = false; // No se ha reproducido el sonido
         TiempoInicial = SystemClock.elapsedRealtime(); // Capturar tiempo del sistema
         timerhandler.postDelayed(timerRunnable,0); // Correr cronómetro en milisegundos.
@@ -79,13 +76,6 @@ public class Cronometro extends Service {
             seg %= 60; // Segundos en base 60.
             String texto_cronometro = String.format("%02d", min) + ":" + String.format("%02d", seg);
             enviarTexto(texto_cronometro); // Enviar valor del cronómetro al TextView cronometro en Duchita.java.
-            if (seg == 0) { // Si los segundos llegan a 0.
-                if (contador == 0) // Evita que se sumen varios minutos cuando seg es 0 en varios milisegundos.
-                    Minutos++; // Sumar un minuto.
-                contador++; // Capturar las veces que seg es igual a 59 en los milisegundos para evitar sumar muchos minutos.
-            }
-            else // Si no es 59, no sumas ningún minuto.
-                contador = 0;
             if (Duchita.sIntervalo != 0 && Duchita.Intervalo == 0) { // Si el intervalo es menor a 00:59 y no es 00:00
                 if (seg % Duchita.sIntervalo == 0 && !reproducido) { // Si los segundos son múltiplos del intervalo en segundos y no se ha reproducido el sonido.
                     if (min != 0 || seg != 0) // evita que se reproduzca el sonido cuando el cronómetro es 00:00.
@@ -95,8 +85,10 @@ public class Cronometro extends Service {
                     reproducido = false; // No se ha reproducido el sonido.
             }
             else {  // Si el intervalo es mayor a 1:00
-                if (Minutos == Duchita.Intervalo && seg == Duchita.sIntervalo && !reproducido) // Si es el intervalo y no se ha reproducido.
-                    reproducirSonido(texto_cronometro, miliseg); // Reproducir sonido.
+                if (min % Duchita.Intervalo == 0 && seg == Duchita.sIntervalo && !reproducido){ // Si min es múltiplo de Intervalo (minutos) y seg es sIntervalo (segundos)
+                    if (min != 0 || seg != 0)
+                        reproducirSonido(texto_cronometro, miliseg); // Reproducir sonido.
+                }
                 else if (seg != Duchita.sIntervalo) // Si los segundos no son igual a los segundos del intervalo.
                     reproducido = false; // no se ha reproducido
             }
@@ -117,7 +109,6 @@ public class Cronometro extends Service {
                 sonido.release(); // Liberar sonido.
             }});
         reproducido = true; // Se ha reproducido.
-        Minutos = 0; // Se reinicia el minuto verificador de intervalos.
         Log.i("Se reprodució en", texto_cronometro + ":" +  String.format("%03d", miliseg%1000));
     }
 
