@@ -116,7 +116,8 @@
                 android:text="Email"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="#212121"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:inputType="textEmailAddress" />
 
             <TextView
                 android:layout_width="wrap_content"
