@@ -1,11 +1,13 @@
 package com.esmifrase.duchita;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Handler;
@@ -132,10 +134,16 @@ public class Cronometro extends Service {
     private void mostrarNotificacion(String titulo, String min, String modo) {
         Intent intent = new Intent(this, Duchita.class);
         PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
-        String CHANNEL_ID = "Canal_1";
+        String CHANNEL_ID = "com.esmifrase.duchita.cronometro";
+        String channelName = "Cronometro";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // SOPORTE DE NOTIFICACIONES PARA API 21+
+            NotificationChannel chan = new NotificationChannel(CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_LOW);
+            chan.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            assert manager != null;
+            manager.createNotificationChannel(chan);
             Notification notification = new Notification.Builder(this, CHANNEL_ID)
-                    .setSmallIcon(R.drawable.duchita)
+                    .setSmallIcon(R.drawable.duchita_blanco)
                     .setContentTitle(titulo)
                     .setContentText(min)
                     .setTicker(modo)
