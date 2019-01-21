@@ -10,9 +10,10 @@ Si quieres probar la app, descarga el APK en tu celular [`duchita.apk`](https://
 ##
 ## Requerimientos
 - Hosting con PHP y MySQL
-- Java 8 o más
-- Android Studio 3.2.1
+- Java 8
+- Android Studio 3.3
   - SDK Versión 28
+  - Gradle Versión 4.10.1
   - BuildTools Versión 28.0.3
 ##
 ## Configuración
