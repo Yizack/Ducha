@@ -40,7 +40,7 @@ Si quieres probar la app, descarga el APK en tu celular [`duchita.apk`](https://
      );
      ```
 4. Conexión a la base de datos.
-   - En [`/archivos php/include/`](https://github.com/Yizack/duchita/blob/master/archivos%20php/include/) editar conexión a tu base de datos de [`db_connection.php`](https://github.com/Yizack/duchita/blob/master/archivos%20php/include/db_connection.php).
+   - En [`/archivos_php/include/`](https://github.com/Yizack/duchita/blob/master/archivos_php/include/) editar conexión a tu base de datos de [`db_connection.php`](https://github.com/Yizack/duchita/blob/master/archivos_php/include/db_connection.php).
      ```php
      ...
      define("DB_HOST","localhost");
