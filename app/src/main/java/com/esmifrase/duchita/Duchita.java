@@ -151,7 +151,8 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
     @Override
     public void onDestroy() {
         super.onDestroy();
-        servicio(Cronometro.STOP);
+        if(isChronometerRunning)
+            servicio(Cronometro.STOP);
     }
 
     @Override
@@ -188,7 +189,9 @@ public class Duchita extends AppCompatActivity implements NavigationView.OnNavig
         else if (id == R.id.nav_salir) {
                 userSession.setLoggedin(false);
                 userInfo.clearUserInfo();
-                servicio(Cronometro.STOP);
+                if(isChronometerRunning)
+                    servicio(Cronometro.STOP);
+                isChronometerRunning = false;
                 startActivity(new Intent(Duchita.this, Login.class));
                 finish();
         }
